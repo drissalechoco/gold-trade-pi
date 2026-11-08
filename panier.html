@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Panier - Gold trade pi</title>
+    <script src="https://minepi.com"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: #111; color: #fff; }
+        header { background-color: #000; color: #d4af37; padding: 20px; text-align: center; border-bottom: 2px solid #d4af37; }
+        .btn-back { background-color: transparent; color: #d4af37; border: 1px solid #d4af37; padding: 8px 15px; text-decoration: none; display: inline-block; margin: 20px; font-weight: bold; border-radius: 4px; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .cart-table { width: 100%; border-collapse: collapse; background-color: #1a1a1a; border-radius: 8px; overflow: hidden; }
+        .cart-table th, .cart-table td { padding: 15px; text-align: left; border-bottom: 1px solid #222; }
+        .cart-table th { background-color: #000; color: #d4af37; }
+        .product-img { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; border: 1px solid #d4af37; }
+        .total-section { background-color: #1a1a1a; padding: 20px; margin-top: 20px; text-align: right; border-radius: 8px; }
+        .total-price { font-size: 1.5rem; color: #d4af37; font-weight: bold; margin-bottom: 20px; }
+        .btn-checkout { background-color: #d4af37; color: #111; border: none; padding: 15px 30px; font-size: 1.1rem; font-weight: bold; cursor: pointer; border-radius: 4px; width: 100%; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>MON PANIER - GOLD TRADE PI</h1>
+        <p>Vérifiez vos articles avant le paiement Pi</p>
+    </header>
+    <a href="index.html" class="btn-back">← Retour à la boutique</a>
+    <div class="container">
+        <table class="cart-table">
+            <thead>
+                <tr><th>Article</th><th>Description</th><th>Prix</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><img src="https://pixabay.com" class="product-img" alt="Or"></td>
+                    <td>Lingot d'Or Pur 24 Carats (10g)</td>
+                    <td style="color: #d4af37; font-weight: bold;">25.00 Pi</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="total-section">
+            <div class="total-price">Total à payer: 25.00 Pi</div>
+            <button class="btn-checkout" onclick="checkoutCart(25.00)">Procéder au paiement sécurisé</button>
+        </div>
+    </div>
+    <script>
+        Pi.init({ version: "2.0", sandbox: true });
+        async function checkoutCart(totalAmount) {
+            try {
+                await Pi.createPayment({
+                    amount: totalAmount,
+                    memo: "Règlement panier sur Gold trade pi",
+                    metadata: { orderId: "cart_999" },
+                }, {
+                    onReadyForServerApproval: function(id) {},
+                    onReadyForServerCompletion: function(id, txid) { alert("Succès! Payé avec succès. TXID: " + txid); },
+                    onCancel: function() {},
+                    onError: function(err) {}
+                });
+            } catch (err) {}
+        }
+    </script>
+</body>
+</html>
