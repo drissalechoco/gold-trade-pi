@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gold trade pi - Market</title>
+    
+    <!-- تضمين مكتبة Pi Network الرسمية المصححة للدفع -->
+    <script src="https://minepi.com"></script>
+    
+    <script>
+      // تهيئة المكتبة فور تحميل الصفحة وتفعيل وضع التجربة (Sandbox)
+      Pi.init({ version: "2.0", sandbox: true });
+
+      // دالة الدفع لشراء سبيكة الذهب
+      function buyGold(amountInPi, productName) {
+          const paymentData = {
+              amount: amountInPi,
+              memo: "Achat de " + productName + " sur Gold Trade Pi",
+              metadata: { productId: "lingot_or_1g" }
+          };
+
+          const callbacks = {
+              onReadyForServerApproval: function(paymentId) {
+                  console.log("الدفع جاهز للموافقة من السيرفر، المعرف:", paymentId);
+                  // هنا يرسل التطبيق معرف الدفع لسيرفرك الخاص لتوثيقه لاحقاً
+              },
+              onReadyForServerCompletion: function(paymentId, txid) {
+                  console.log("تم تأمين الدفع على البلوكشين. معرف المعاملة:", txid);
+                  // هنا يتم تأكيد إتمام العملية وشحن المنتج للمشتري
+              },
+              onCancel: function(paymentId) {
+                  alert("تم إلغاء عملية الشراء من قبل المستخدم.");
+              },
+              onError: function(error, payment) {
+                  alert("حدث خطأ أثناء الدفع: " + error.message);
+              }
+          };
+
+          // إطلاق واجهة الدفع الرسمية داخل متصفح Pi
+          Pi.createPayment(paymentData, callbacks);
+      }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #111;
+            color: #fff;
+        }
+        header {
+            background-color: #000;
+            color: #d4af37;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #d4af37;
+        }
+        .nav-menu {
+            display: flex;
+            justify-content: center;
+            background-color: #1a1a1a;
+            padding: 10px;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        .nav-menu a:hover {
+            color: #d4af37;
+        }
+        .product-card {
+            border: 1px solid #d4af37;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 300px;
+            text-align: center;
+            background-color: #1a1a1a;
+        }
+        .btn-buy {
+            background-color: #d4af37;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn-buy:hover {
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Gold Trade Pi</h1>
+    </header>
+
+    <div class="nav-menu">
+        <a href="index.html">Accueil</a>
+        <a href="historique.html">Historique</a>
+        <a href="livraison.html">Livraison</a>
+    </div>
+
+    <!-- كارت المنتج المحدث مع زر الشراء التفاعلي -->
+    <div class="product-card">
+        <h3>Lingot d'or (1g)</h3>
+        <p>Prix: 2.5 Pi</p>
+        <!-- الزر يستدعي دالة الدفع عند الضغط عليه ويمرر القيمة 2.5 عملة -->
+        <button class="btn-buy" onclick="buyGold(2.5, 'Lingot d\'or 1g')">Acheter maintenant</button>
+    </div>
+
+</body>
+</html>
